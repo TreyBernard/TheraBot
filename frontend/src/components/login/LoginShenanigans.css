@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Markazi Text", serif;
+    font-weight: 400;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #1a1a2e; 
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1{
+    font-family: "Markazi Text", serif;
+    font-weight: 700; 
+    margin-bottom: 20px;
+    color: white;
+    text-align: center;
+    font-size: 36px;
+}
+
+.wrapper{
+    background-color: #292c44;
+    padding: 30px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.inputBox{
+    margin-bottom: 20px;
+
+}
+
+.inputBox input{
+    width: 100%;
+    padding: 12px;
+    background-color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    color: #000000;
+    font-size: 18px;
+    transition: all 0.5s ease-in-out;
+}
+
+.inputBox input:focus{
+    outline: none;
+    border-color: #b39ddb;
+    background-color: #f3e5f5;
+    opacity: 1;
+}
+
+.remember_forgot {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    color: #ffffff
+}
+
+.remember_forgot a{
+    color: #b39ddb;
+    text-decoration: none;
+    transition: all 0.5s ease-in-out;
+}
+.remember_forgot a:hover{
+    color: #9575cd;
+    text-decoration: underline;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #b39ddb;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+}
+
+button:hover{
+    background-color: #9575cd;
+    opacity: 0.8;
+}
+
+.signupLink a{
+    color: #b39ddb;
+    text-decoration: none;
+    transition: all 0.5s ease-in-out;
+}
+
+.signupLink a:hover{
+    color: #9575cd;
+    text-decoration: underline;
+}
