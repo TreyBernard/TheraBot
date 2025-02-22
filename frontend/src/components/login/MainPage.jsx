@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './mainpage.css'; 
-import avatar1 from './miku1.png';
-import avatar2 from './miku2.png';
+import avatar1 from './cat1.png';
+import avatar2 from './cat2.png';
 const MainPage = () => {
   const [avatar, setAvatar] = useState(avatar1);
   const [botResponse, setBotResponse] = useState("Hello, how are you today?");
@@ -9,7 +9,7 @@ const MainPage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
         setAvatar((prev) => prev === avatar1 ? avatar2 : avatar1);
-}, 160);
+}, 200);
     return () => clearInterval(interval);
 },[]);
 

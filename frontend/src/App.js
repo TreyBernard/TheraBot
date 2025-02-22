@@ -1,4 +1,4 @@
-import LoginShenanigans from './components/login/LoginShenaningans';
+import LoginShenanigans from './components/login/MainPage';
 function App() {
   return (
     <div >
