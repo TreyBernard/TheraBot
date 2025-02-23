@@ -5,8 +5,7 @@ app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests (if your React runs on a different port)
 
 
-API_KEY = "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"
-
+API_KEY = "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"
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
@@ -47,6 +46,9 @@ def generate_response():
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json",
     }
+
+    print("DEBUG: API Key being used ->", API_KEY)  # Check if API key is set
+
 
     data = {
         "model": "meta-llama/llama-3.3-70b-instruct:free",
