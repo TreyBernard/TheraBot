@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom"; // Import useLocation
 import axios from "axios";
 import "./mainpage.css"; 
 import avatar1 from "./cat1.png";
 import avatar2 from "./cat2.png";
 
 const MainPage = () => {
+    const location = useLocation();
+    const userInfo = location.state || {}; // Get user info from Login page
+
     const [avatar, setAvatar] = useState(avatar1);
     const [botResponse, setBotResponse] = useState("Hello, how are you today?");
-    const [userMessage, setUserMessage] = useState(""); // User input
-    const [loading, setLoading] = useState(false); // Loading state
+    const [userMessage, setUserMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    // Avatar animation (blinking effect)
     useEffect(() => {
         const interval = setInterval(() => {
             setAvatar((prev) => (prev === avatar1 ? avatar2 : avatar1));
@@ -18,25 +21,30 @@ const MainPage = () => {
         return () => clearInterval(interval);
     }, []);
 
-    // Function to send user input to Flask API
     const sendMessage = async () => {
         if (userMessage.trim() === "") return; // Prevent empty messages
-        setLoading(true); // Show loading state
-        setBotResponse("Thinking..."); // Temporary response
+
+        setLoading(true);
+        setBotResponse("Thinking...");
 
         try {
             const response = await axios.post("http://localhost:5000/generate", {
-                user_info: { name: "John", age: 25, school: "GT", feeling: "anxious" },
+                user_info: {
+                    name: userInfo.username || "Unknown",
+                    school: userInfo.school || "Unknown",
+                    age: userInfo.age || "Unknown",
+                    feeling: userInfo.feeling || "Unknown",
+                },
                 emotion: "stressed",
                 message: userMessage,
             });
 
-            setBotResponse(response.data.response); // Update with AI response
+            setBotResponse(response.data.response);
         } catch (error) {
             console.error("Error fetching response:", error);
             setBotResponse("Oops! Something went wrong.");
         } finally {
-            setLoading(false); // Reset loading state
+            setLoading(false);
         }
     };
 
@@ -48,17 +56,15 @@ const MainPage = () => {
             <div className="chat-box">
                 <p>{botResponse}</p>
             </div>
-            {/* Input field for user messages */}
             <input
                 type="text"
                 placeholder="Type your message..."
                 value={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()} // Send on Enter key
+                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                 disabled={loading}
                 className="chat-input"
             />
-            {/* Send button */}
             <button onClick={sendMessage} disabled={loading} className="send-btn">
                 {loading ? "Loading..." : "Send"}
             </button>
