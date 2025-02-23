@@ -2,11 +2,16 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
 import logging
+from FBED import predict
+
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests (if your React runs on a different port)
 
+<<<<<<< HEAD
 is_talking = False
 label_predicted = None
+=======
+>>>>>>> 84f38f9 (Pull Latest Changes)
 
 API_KEY = "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"
 chat_sessions = {}
@@ -53,13 +58,18 @@ def update_talking_status():
     is_talking = data.get("isTalking", False)
     return jsonify({"message": "Updated is_talking status"})
 
+def emotion_predict():
+    emotion_prediction = predict()
+    return emotion_prediction
+
 @app.route('/generate', methods=['POST'])
 def generate_response():
     data = request.get_json()
     user_info = data.get("user_info", {})
-    detected_emotion = data.get("emotion", "neutral")
+    detected_emotion = data.get("emotion", emotion_predict() or "neutral")
     user_message = data.get("message", "")
     username = user_info.get("name", "Unknown")
+
     
     prompt = f"""
     You are an empathetic AI therapist. The user has shared:
@@ -73,6 +83,8 @@ def generate_response():
     
     Provide a thoughtful and compassionate therapeutic response. Provide useful feedback when appropriate
     based on the school submitted by the user, like in the form of resources, things to do in the school area, etc.
+    By taking into account the user's emotions through facial and body expressions, attempt in using Cognitive 
+    Behavioral Therapy (CBT) to better understand the patients feelings and goals coming out of this session. 
     """
 
     if username not in chat_sessions:
@@ -87,7 +99,8 @@ def generate_response():
                 - Detected Emotion: {detected_emotion}
                 
                 Engage in a thoughtful conversation, remembering past exchanges within this session. Also, provide useful feedback when appropriate based on the school 
-                submitted by the user, like in the form of resources, things to do in the school area, etc.
+                submitted by the user, like in the form of resources, things to do in the school area, etc. By taking into account the user's emotions through facial
+                and body expressions, attempt in using Cognitive Behavioral Therapy (CBT) to better understand the patients feelings and goals coming out of this session. 
             """}
         ]
 
@@ -127,6 +140,10 @@ def generate_response():
     except Exception as e:
         print("ERROR:", str(e))  # Print error in Flask logs
         return jsonify({"error": str(e)}), 500
+    
+
+
 if __name__ == "__main__":
     # By default, runs on http://127.0.0.1:5000
     app.run(debug=True)
+
