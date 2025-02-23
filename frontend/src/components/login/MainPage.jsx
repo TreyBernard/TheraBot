@@ -57,9 +57,28 @@ const MainPage = () => {
             setLoading(false);
         }
     };
-    const handleTalk = () => {
-        setIsTalking((prev) => !prev);
+    // Function to update talking state in backend
+    const updateTalkingStatus = async (newState) => {
+        try {
+            await axios.post("http://localhost:5000/update_talking_status", {
+                username: userInfo.username || "default_user",
+                isTalking: newState,
+            });
+            console.log(`Sent isTalking=${newState} to backend`);
+        } catch (error) {
+            console.error("Error updating talking state:", error);
+        }
     };
+
+    // Handle Talk Button Click
+    const handleTalk = async () => {
+        const newState = !isTalking;
+        setIsTalking(newState);
+        updateTalkingStatus(newState); // Send to backend
+    };
+    // const handleTalk = () => {
+    //     setIsTalking((prev) => !prev);
+    // };
     const handleStop = () => {
         navigate("/");
     };

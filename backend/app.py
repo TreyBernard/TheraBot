@@ -2,11 +2,17 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
 import logging
+from FBED import predict
+
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests (if your React runs on a different port)
 
 chat_sessions = {}
 API_KEY = "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"
+
+is_talking = False
+label_predicted = None
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
@@ -22,14 +28,46 @@ def login():
         return jsonify({'success': True, 'message': 'Login successful!'})
     else:
         return jsonify({'success': False, 'message': 'Invalid credentials.'}), 401
+    
+# Store talking state per user
+talking_states = {}
+
+# Endpoint for SER.py to get is_talking
+@app.route("/get_talking_status", methods=["GET"])
+def get_talking_status():
+    print("Checking talking status")
+    print(f"is_talking: {is_talking}")
+    return jsonify({"isTalking": is_talking})
+
+# Endpoint for SER.py to send prediction back
+@app.route("/receive_prediction", methods=["POST"])
+def receive_prediction():
+    global label_predicted
+    data = request.get_json()
+    label_predicted = data.get("label_predicted", "Unknown")
+    print(f"Received Prediction: {label_predicted}")
+    return jsonify({"message": "Prediction received successfully"})
+
+# Endpoint to update is_talking (optional)
+@app.route("/update_talking_status", methods=["POST"])
+def update_talking_status():
+    global is_talking
+    data = request.get_json()
+    is_talking = data.get("isTalking", False)
+    return jsonify({"message": "Updated is_talking status"})
+
+def emotion_predict():
+    emotion_prediction = predict()
+    return emotion_prediction
 
 @app.route('/generate', methods=['POST'])
 def generate_response():
     data = request.get_json()
     user_info = data.get("user_info", {})
-    detected_emotion = data.get("emotion", "neutral")
+    detected_emotion = data.get("emotion", emotion_predict() or "neutral")
     user_message = data.get("message", "")
     username = user_info.get("name", "Unknown")
+
     
     prompt = f"""
     You are an empathetic AI therapist. The user has shared:
@@ -43,6 +81,8 @@ def generate_response():
     
     Provide a thoughtful and compassionate therapeutic response. Provide useful feedback when appropriate
     based on the school submitted by the user, like in the form of resources, things to do in the school area, etc.
+    By taking into account the user's emotions through facial and body expressions, attempt in using Cognitive 
+    Behavioral Therapy (CBT) to better understand the patients feelings and goals coming out of this session. 
     """
 
     if username not in chat_sessions:
@@ -57,7 +97,8 @@ def generate_response():
                 - Detected Emotion: {detected_emotion}
                 
                 Engage in a thoughtful conversation, remembering past exchanges within this session. Also, provide useful feedback when appropriate based on the school 
-                submitted by the user, like in the form of resources, things to do in the school area, etc.
+                submitted by the user, like in the form of resources, things to do in the school area, etc. By taking into account the user's emotions through facial
+                and body expressions, attempt in using Cognitive Behavioral Therapy (CBT) to better understand the patients feelings and goals coming out of this session. 
             """}
         ]
 
@@ -97,6 +138,10 @@ def generate_response():
     except Exception as e:
         print("ERROR:", str(e))  # Print error in Flask logs
         return jsonify({"error": str(e)}), 500
+    
+
+
 if __name__ == "__main__":
     # By default, runs on http://127.0.0.1:5000
     app.run(debug=True)
+
