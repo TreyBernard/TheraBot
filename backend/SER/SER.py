@@ -1,3 +1,4 @@
+#from backend.app import is_talking
 import pandas as pd 
 import numpy as np 
 import tensorflow as tf
@@ -18,6 +19,8 @@ from base64 import b64decode
 #from IPython.display import Audio,HTML
 from scipy.io.wavfile import read as wav_read
 import io
+import requests
+import time
 #import ffmpeg
 warnings.filterwarnings("ignore")
 
@@ -406,20 +409,28 @@ def emotion_recognition_model(x_train,y_train,x_val,y_val):
   #plot loss and accuracy curves
   plotgraph(history)
 
-#   # Function to record audio from microphone
-def get_audio(duration=3, sr=22050):  # Default: 3 seconds, 22.05 kHz
+# Function to record audio continuously until is_talking is False
+def get_audio(sr=22050):
+    print("Waiting for user to start talking...")
+    
+    while not get_is_talking():  # Wait until the user starts talking
+        time.sleep(0.1)  # Avoid excessive API requests
+
     print("Recording... Speak now!")
+    audio_data = []  # List to store recorded audio chunks
+
+    while get_is_talking():  # Keep recording until is_talking becomes False
+        audio_chunk = sd.rec(int(0.5 * sr), samplerate=sr, channels=1, dtype='float32')  # Record 0.5 sec chunks
+        sd.wait()  # Wait for chunk recording to finish
+        audio_data.append(audio_chunk)  # Append chunk to list
+
+    print("Recording stopped.")
     
-    # Record audio
-    audio = sd.rec(int(duration * sr), samplerate=sr, channels=1, dtype='float32')
-    sd.wait()  # Wait for the recording to finish
+    #audio = np.concatenate(audio_data, axis=0)  # Concatenate all chunks along the first axis
+    audio = np.squeeze(audio_data)
+    # Convert list of recorded chunks into a single NumPy array
     
-    print("Recording finished.")
-    
-    # Convert recorded data to 1D array
-    audio = np.squeeze(audio)
-    
-    return audio, sr
+    return audio, sr  # Return final recorded audio and sample rate
 
 # Function to extract features from recorded audio (assuming extract_features, noise, stretch, and pitch exist)
 def get_features_recorded(data, sr):
@@ -472,6 +483,7 @@ def test_realtime(encoder):
     #     print(f"Sample {i+1}: {probs}")
 
     # Keep the one-hot encoded format for inverse_transform
+    
     label_predicted = encoder.inverse_transform(probabilities)  # Expecting (N, 6)
 
     # Get confidence scores
@@ -492,6 +504,8 @@ def test_realtime(encoder):
         df["audio"][i] = feature[i]
 
     df.to_csv("realtimetested/real_time_predicted_audio_features.csv", mode='a', index=False)
+
+    return label_predicted
 
 #function to evaluate the model performance once the best model is saved
 #it loads the best model and then evaluates the performance
@@ -523,14 +537,48 @@ def evaluate_model(x_train, x_test, y_train, y_test, x_val, y_val):
   print("*****************************")
 
   #function calculates the above code in sequence
+
+# Function to get is_talking status from app.py
+def get_is_talking():
+    try:
+        response = requests.get("http://localhost:5000/get_talking_status")
+        return response.json().get("isTalking", False)
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching talking status: {e}")
+        return False
+
+# Function to send prediction result back to app.py
+def send_prediction(label_predicted):
+    try:
+        response = requests.post("http://localhost:5000/receive_prediction", json={"label_predicted": str(label_predicted[0])})
+        print(response.json())  # Print response from Flask
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending prediction: {e}")
+
+def run_ser_model():
+    while True:
+        is_talking = get_is_talking()  # Get is_talking from Flask
+        if is_talking:
+            print("User is talking, analyzing...")
+            # Simulated prediction
+            x_train, x_test, y_train, y_test, x_val, y_val, encoder = audio_features_final()
+            label_predicted = test_realtime(encoder)  # Replace with actual model prediction
+            send_prediction(label_predicted)  # Send result to Flask
+        else:
+            print("User is not talking... waiting.")
+
+        import time
+        time.sleep(1)  # Check status every second
+
 #it runs the model and also evaluates the model performance
 @calc_time
 def main():
   print("Emotion Recognition Model")
+  run_ser_model()
   #get train,test data and labels 
-  x_train, x_test, y_train, y_test, x_val, y_val, encoder = audio_features_final()
+  #x_train, x_test, y_train, y_test, x_val, y_val, encoder = audio_features_final()
   #test_audio_file("./Audiofiles/TESS/OAF_angry/OAF_chair_angry.wav", encoder)
-  test_realtime(encoder)
+  #test_realtime(encoder)
   #call the emotion recognition model
   #emotion_recognition_model(x_train,y_train,x_val,y_val)
   #evaluate the model performance
