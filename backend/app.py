@@ -5,6 +5,9 @@ import logging
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests (if your React runs on a different port)
 
+is_talking = False
+label_predicted = None
+
 API_KEY = "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"
 chat_sessions = {}
 @app.route('/')
@@ -22,6 +25,33 @@ def login():
         return jsonify({'success': True, 'message': 'Login successful!'})
     else:
         return jsonify({'success': False, 'message': 'Invalid credentials.'}), 401
+    
+# Store talking state per user
+talking_states = {}
+
+# Endpoint for SER.py to get is_talking
+@app.route("/get_talking_status", methods=["GET"])
+def get_talking_status():
+    print("Checking talking status")
+    print(f"is_talking: {is_talking}")
+    return jsonify({"isTalking": is_talking})
+
+# Endpoint for SER.py to send prediction back
+@app.route("/receive_prediction", methods=["POST"])
+def receive_prediction():
+    global label_predicted
+    data = request.get_json()
+    label_predicted = data.get("label_predicted", "Unknown")
+    print(f"Received Prediction: {label_predicted}")
+    return jsonify({"message": "Prediction received successfully"})
+
+# Endpoint to update is_talking (optional)
+@app.route("/update_talking_status", methods=["POST"])
+def update_talking_status():
+    global is_talking
+    data = request.get_json()
+    is_talking = data.get("isTalking", False)
+    return jsonify({"message": "Updated is_talking status"})
 
 @app.route('/generate', methods=['POST'])
 def generate_response():
