@@ -13,3 +13,5 @@ threadpoolctl==3.5.0
 keras==3.8.0
 matplotlib==3.10.0
 sounddevice==0.5.1
+SpeechRecognition==3.14.1
+mediapipe==0.10.21
