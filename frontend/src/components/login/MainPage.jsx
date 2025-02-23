@@ -9,7 +9,7 @@ const MainPage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
         setAvatar((prev) => prev === avatar1 ? avatar2 : avatar1);
-}, 200);
+}, 150);
     return () => clearInterval(interval);
 },[]);
 
@@ -18,8 +18,11 @@ const MainPage = () => {
             <div className = "avatar-box">
                 <img src = {avatar} alt="TheraBot" className = "avatar"/>
             </div>
-            <div className = "chat-box">
-                <p>{botResponse}</p>
+            <div className ="chat-container">
+                <div className = "chat-box">
+                    <p>{botResponse}</p>
+                </div>
+                <button className = "end-btn">End Session</button>
             </div>
         </div>
     );

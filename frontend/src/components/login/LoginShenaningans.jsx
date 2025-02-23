@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './LoginShenanigans.css'; 
 
 const LoginShenanigans = () => {
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const username = e.target.elements.username.value;
@@ -15,7 +18,8 @@ const LoginShenanigans = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        alert(data.message); // Displays "Login successful!" if credentials are valid
+        alert(data.message);
+        navigate('/main');// Displays "Login successful!" if credentials are valid
       } else {
         alert('Invalid credentials.');
       }
@@ -34,6 +38,15 @@ const LoginShenanigans = () => {
         <div className='inputBox'>
           <input type="password" name="password" placeholder='Password' required />
         </div>
+        <div className='inputBox'>
+          <input type="school" name="school" placeholder='School' optional />
+        </div>
+        <div className='inputBox'>
+          <input type="age" name="age" placeholder='Age' required />
+        </div>
+        <div className='inputFeeling'>
+          <textarea type="feeling" name="feeling" placeholder='Describe how you are feeling in one word'  rows ="2" required />
+        </div>
         <div className='remember_forgot'>
           <label>
             <input type='checkbox' /> Remember me
@@ -50,3 +63,4 @@ const LoginShenanigans = () => {
 };
 
 export default LoginShenanigans;
+ 
