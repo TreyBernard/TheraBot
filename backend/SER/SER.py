@@ -407,7 +407,7 @@ def emotion_recognition_model(x_train,y_train,x_val,y_val):
   plotgraph(history)
 
 #   # Function to record audio from microphone
-def get_audio(duration=30, sr=22050):  # Default: 3 seconds, 22.05 kHz
+def get_audio(duration=3, sr=22050):  # Default: 3 seconds, 22.05 kHz
     print("Recording... Speak now!")
     
     # Record audio
@@ -453,13 +453,6 @@ def test_realtime(encoder):
 
     np.save(f"realtimetested/audiorec{len(files)}.npy", audio)
 
-    # Plot the recorded audio
-    plt.figure(figsize=(5,5))
-    plt.plot(audio)
-    plt.show()
-    
-    plt.savefig(f"realtimetested/audiorec{len(files)}.png")
-
     # Convert int to float
     audio = audio.astype('float')
 
@@ -474,18 +467,22 @@ def test_realtime(encoder):
     probabilities = res_model.predict(feature)
 
     # Print all probability scores for debugging
-    print("\nProbability Scores for Each Emotion:")
-    for i, probs in enumerate(probabilities):
-        print(f"Sample {i+1}: {probs}")
+    # print("\nProbability Scores for Each Emotion:")
+    # for i, probs in enumerate(probabilities):
+    #     print(f"Sample {i+1}: {probs}")
 
     # Keep the one-hot encoded format for inverse_transform
     label_predicted = encoder.inverse_transform(probabilities)  # Expecting (N, 6)
 
     # Get confidence scores
-    confidence = np.max(probabilities, axis=1)  
+    #confidence = np.max(probabilities, axis=1)  
 
     print("\nPredicted Emotion: {}".format(label_predicted[0]))
-    print("Confidence Score: {:.2f}".format(confidence[0]))
+    plt.figure(figsize=(5,5))
+    plt.plot(audio)
+    plt.show()
+    plt.savefig(f"realtimetested/audiorec{len(files)}.png")
+    # print("Confidence Score: {:.2f}".format(confidence[0]))
 
     # Save results in a CSV file
     df = pd.DataFrame(index=range(0,3), columns=['path','label','audio'])

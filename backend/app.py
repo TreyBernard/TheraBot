@@ -5,13 +5,8 @@ import logging
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests (if your React runs on a different port)
 
-<<<<<<< HEAD
 API_KEY = "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"
 chat_sessions = {}
-=======
-
-API_KEY = "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"
->>>>>>> a74cf43b (added flag functionality)
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
