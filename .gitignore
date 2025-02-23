@@ -11,7 +11,10 @@
 /backend/env/
 /backend/venv/
 /backend/SER/venv/
-/backend/SER/Audiofiles/
+/backend/SER/Audiofiles/CREMA-D
+/backend/SER/Audiofiles/RAVDESS
+/backend/SER/Audiofiles/SAVEE
+/backend/SER/Audiofiles/TESS
 /backend/SER/realtimetested/
 /backend/SER/audiotested/
 # production
