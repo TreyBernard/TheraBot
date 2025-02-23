@@ -7,14 +7,12 @@ from FBED import predict
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests (if your React runs on a different port)
 
-<<<<<<< HEAD
+chat_sessions = {}
+API_KEY = "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"
+
 is_talking = False
 label_predicted = None
-=======
->>>>>>> 84f38f9 (Pull Latest Changes)
 
-API_KEY = "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"
-chat_sessions = {}
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
@@ -60,6 +58,7 @@ def update_talking_status():
 
 def emotion_predict():
     emotion_prediction = predict()
+    print("DEBUG: Emotion Prediction ->", emotion_prediction)
     return emotion_prediction
 
 @app.route('/generate', methods=['POST'])
