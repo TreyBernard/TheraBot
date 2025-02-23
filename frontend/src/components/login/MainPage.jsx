@@ -4,6 +4,8 @@ import axios from "axios";
 import "./mainpage.css"; 
 import avatar1 from "./cat1.png";
 import avatar2 from "./cat2.png";
+import { useNavigate } from "react-router-dom";
+
 
 const MainPage = () => {
     const location = useLocation();
@@ -13,14 +15,16 @@ const MainPage = () => {
     const [botResponse, setBotResponse] = useState("Hello, how are you today?");
     const [userMessage, setUserMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [isTalking, setIsTalking] = useState(false); // Loading state
+    const navigate = useNavigate(); // Loading state
 
+    // Avatar animation (blinking effect)
     useEffect(() => {
         const interval = setInterval(() => {
             setAvatar((prev) => (prev === avatar1 ? avatar2 : avatar1));
         }, 200);
         return () => clearInterval(interval);
     }, []);
-
     const sendMessage = async () => {
         if (userMessage.trim() === "") return; // Prevent empty messages
 
@@ -47,6 +51,12 @@ const MainPage = () => {
             setLoading(false);
         }
     };
+    const handleTalk = () => {
+        setIsTalking((prev) => !prev);
+    };
+    const handleStop = () => {
+        navigate("/");
+    };
 
     return (
         <div className="main-page">
@@ -56,18 +66,10 @@ const MainPage = () => {
             <div className="chat-box">
                 <p>{botResponse}</p>
             </div>
-            <input
-                type="text"
-                placeholder="Type your message..."
-                value={userMessage}
-                onChange={(e) => setUserMessage(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                disabled={loading}
-                className="chat-input"
-            />
-            <button onClick={sendMessage} disabled={loading} className="send-btn">
-                {loading ? "Loading..." : "Send"}
-            </button>
+            <div className="button-box">
+                <button className ="talk-toggle" onClick = {handleTalk}> {isTalking ? "Stop" : "Talk"} </button>
+                <button className = "stop-btn" onClick = {handleStop}> End Session </button>
+            </div>
         </div>
     );
 };
