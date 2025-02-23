@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests (if your React runs on a different port)
 
 chat_sessions = {}
-API_KEY = "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"
+API_KEY = "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"
 
 is_talking = False
 label_predicted = None
@@ -58,6 +58,7 @@ def update_talking_status():
 
 def emotion_predict():
     emotion_prediction = predict()
+    print("DEBUG: Emotion Prediction ->", emotion_prediction)
     return emotion_prediction
 
 @app.route('/generate', methods=['POST'])
