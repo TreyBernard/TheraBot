@@ -406,8 +406,8 @@ def emotion_recognition_model(x_train,y_train,x_val,y_val):
   #plot loss and accuracy curves
   plotgraph(history)
 
-  # Function to record audio from microphone
-def get_audio(duration=4, sr=22050):  # Default: 3 seconds, 22.05 kHz
+#   # Function to record audio from microphone
+def get_audio(duration=30, sr=22050):  # Default: 3 seconds, 22.05 kHz
     print("Recording... Speak now!")
     
     # Record audio
@@ -470,11 +470,22 @@ def test_realtime(encoder):
     scaler = MinMaxScaler()
     feature = scaler.fit_transform(feature)
 
-    # Get the predicted label
-    label = res_model.predict(feature)
-    label_predicted = encoder.inverse_transform(label)
+    # Get raw probability scores
+    probabilities = res_model.predict(feature)
 
-    print("\nThe Emotion Predicted For Recorded Audio Using Microphone is {}".format(label_predicted[0]))
+    # Print all probability scores for debugging
+    print("\nProbability Scores for Each Emotion:")
+    for i, probs in enumerate(probabilities):
+        print(f"Sample {i+1}: {probs}")
+
+    # Keep the one-hot encoded format for inverse_transform
+    label_predicted = encoder.inverse_transform(probabilities)  # Expecting (N, 6)
+
+    # Get confidence scores
+    confidence = np.max(probabilities, axis=1)  
+
+    print("\nPredicted Emotion: {}".format(label_predicted[0]))
+    print("Confidence Score: {:.2f}".format(confidence[0]))
 
     # Save results in a CSV file
     df = pd.DataFrame(index=range(0,3), columns=['path','label','audio'])
@@ -485,7 +496,7 @@ def test_realtime(encoder):
 
     df.to_csv("realtimetested/real_time_predicted_audio_features.csv", mode='a', index=False)
 
-    #function to evaluate the model performance once the best model is saved
+#function to evaluate the model performance once the best model is saved
 #it loads the best model and then evaluates the performance
 @calc_time
 def evaluate_model(x_train, x_test, y_train, y_test, x_val, y_val):
@@ -521,6 +532,7 @@ def main():
   print("Emotion Recognition Model")
   #get train,test data and labels 
   x_train, x_test, y_train, y_test, x_val, y_val, encoder = audio_features_final()
+  #test_audio_file("./Audiofiles/TESS/OAF_angry/OAF_chair_angry.wav", encoder)
   test_realtime(encoder)
   #call the emotion recognition model
   #emotion_recognition_model(x_train,y_train,x_val,y_val)

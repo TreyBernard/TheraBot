@@ -13,6 +13,7 @@
 /backend/SER/venv/
 /backend/SER/Audiofiles/
 /backend/SER/realtimetested/
+/backend/SER/audiotested/
 # production
 /build
 .env
