@@ -10,7 +10,10 @@
 # Ignore virtual environments
 /backend/env/
 /backend/venv/
-
+/backend/SER/venv/
+/backend/SER/Audiofiles/
+/backend/SER/realtimetested/
+/backend/SER/audiotested/
 # production
 /build
 .env

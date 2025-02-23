@@ -1,1 +1,13 @@
 Flask==2.2.3
+tensorflow==2.18.0
+librosa==0.10.2.post1
+numpy==2.0.2
+pandas==2.2.3
+regex==2024.11.6
+scikit-learn==1.6.1
+scipy==1.15.2
+joblib==1.4.2
+threadpoolctl==3.5.0
+keras==3.8.0
+matplotlib==3.10.0
+sounddevice==0.5.1
