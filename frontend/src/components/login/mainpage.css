@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    margin: 0;
+    font-family: "Markazi Text", serif;
+    font-weight: 400;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #1a1a2e; 
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    background-color: #292c44;
+}
+
+.avatar-box{
+    width: 250px;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);;
+}
+
+.avatar{
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.chat-box{
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.chat-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 18px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.chat-input:focus {
+    outline: none;
+    border: 2px solid #f39c12;
+}
+
+.send-btn {
+    margin-top: 10px;
+    padding: 10px 15px;
+    border: none;
+    background-color: #f39c12;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.send-btn:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+
+@media (max-width: 600px){
+    .main-container{
+        max-width: 90%;
+    }
+    .avatar-box{
+        width: 200px;
+        height: 300px;
+    }
+    .chat-box{
+        font-size: 16px;
+    }
+}
