@@ -5,7 +5,10 @@ import "./mainpage.css";
 import avatar1 from "./cat1.png";
 import avatar2 from "./cat2.png";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 
+=======
+>>>>>>> a74cf43b (added flag functionality)
 
 const MainPage = () => {
     const location = useLocation();
@@ -13,18 +16,34 @@ const MainPage = () => {
 
     const [avatar, setAvatar] = useState(avatar1);
     const [botResponse, setBotResponse] = useState("Hello, how are you today?");
+<<<<<<< HEAD
     const [userMessage, setUserMessage] = useState("");
     const [loading, setLoading] = useState(false);
+=======
+    const [userMessage, setUserMessage] = useState(""); // User input
+    const [loading, setLoading] = useState(false); // Loading state
+>>>>>>> a74cf43b (added flag functionality)
     const [isTalking, setIsTalking] = useState(false); // Loading state
     const navigate = useNavigate(); // Loading state
 
     // Avatar animation (blinking effect)
     useEffect(() => {
-        const interval = setInterval(() => {
-            setAvatar((prev) => (prev === avatar1 ? avatar2 : avatar1));
-        }, 200);
+        let interval;
+        if (!isTalking){
+            interval = setInterval(() => {
+                setAvatar((prev) => (prev === avatar1 ? avatar2 : avatar1));
+            }, 200);
+        }else{
+            setAvatar(avatar1);
+        }
         return () => clearInterval(interval);
+<<<<<<< HEAD
     }, []);
+=======
+    }, [isTalking]);
+
+    // Function to send user input to Flask API
+>>>>>>> a74cf43b (added flag functionality)
     const sendMessage = async () => {
         if (userMessage.trim() === "") return; // Prevent empty messages
 
@@ -57,7 +76,10 @@ const MainPage = () => {
     const handleStop = () => {
         navigate("/");
     };
+<<<<<<< HEAD
 
+=======
+>>>>>>> a74cf43b (added flag functionality)
     return (
         <div className="main-page">
             <div className="avatar-box">
