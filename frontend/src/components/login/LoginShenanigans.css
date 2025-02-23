@@ -13,6 +13,9 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #1a1a2e; 
+    background-image: url('./background.avif');
+    background-size: cover;
+    background-position: center;
     color: white;
     height: 100vh;
     display: flex;
@@ -44,17 +47,46 @@ h1{
 }
 
 .inputBox input{
+    font-family: "Markazi Text", serif;
+    font-weight: 400;
     width: 100%;
     padding: 12px;
     background-color: #ffffff;
     border: 1px solid #ffffff;
     border-radius: 5px;
     color: #000000;
-    font-size: 18px;
+    font-size: 24px;
     transition: all 0.5s ease-in-out;
 }
 
 .inputBox input:focus{
+    outline: none;
+    border-color: #b39ddb;
+    background-color: #f3e5f5;
+    opacity: 1;
+}
+.inputFeeling{
+    margin-bottom: 20px;
+
+}
+
+.inputFeeling textarea{
+    font-family: "Markazi Text", serif;
+    font-weight: 400;
+    width: 100%;
+    height: 70b;
+    padding: 12px;
+    background-color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    color: #000000;
+    font-size: 24px;
+    resize: none;
+
+    transition: all 0.5s ease-in-out;
+}
+
+.inputFeeling textarea:focus{
     outline: none;
     border-color: #b39ddb;
     background-color: #f3e5f5;

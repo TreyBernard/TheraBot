@@ -26,14 +26,14 @@ body{
     padding: 30px;
     border-radius: 8px;
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
     text-align: center;
     background-color: #292c44;
 }
 
 .avatar-box{
-    width: 250px;
-    height: 350px;
+    width: 500px;
+    height: 520px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,15 +49,32 @@ body{
     border-radius: 8px;
     object-fit: contain;
 }
-
+.chat-container{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 500px;
+}
 .chat-box{
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     padding: 15px;
     border-radius: 8px;
+    display: flex;
     background-color: rgba(255, 255, 255, 0.1);
     font-size: 20px;
+    justify-content: center;
+    align-items: center;
     color: #ffffff;
+}
+.end-btn{
+    color: #ffffff;
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    width: 100px;
+    margin-left: 10px;
 }
 
 .chat-input {
@@ -81,10 +98,7 @@ body{
         max-width: 90%;
     }
     .avatar-box{
-        width: 200px;
-        height: 300px;
-    }
-    .chat-box{
-        font-size: 16px;
+        width: 450px;
+        height: 700px;
     }
 }

@@ -8,21 +8,19 @@ const MainPage = () => {
     const [avatar, setAvatar] = useState(avatar1);
     const [botResponse, setBotResponse] = useState("Hello, how are you today?");
 
-
-    // Avatar animation (blinking effect)
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setAvatar((prev) => (prev === avatar1 ? avatar2 : avatar1));
-        }, 200);
-        return () => clearInterval(interval);
-    }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+        setAvatar((prev) => prev === avatar1 ? avatar2 : avatar1);
+}, 150);
+    return () => clearInterval(interval);
+},[]);
 
     return (
         <div className="main-page">
             <div className="avatar-box">
                 <img src={avatar} alt="TheraBot" className="avatar" />
             </div>
-            <div className="chat-box">
+            <div className = "chat-box">
                 <p>{botResponse}</p>
             </div>
             
