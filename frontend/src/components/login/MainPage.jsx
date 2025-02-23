@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; // Import useLocation and useNavigate
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./mainpage.css"; 
 import avatar1 from "./cat1.png";
@@ -62,6 +62,20 @@ const MainPage = () => {
         setRecognition(recog);
     }, []);
 
+    // Use TTS to speak out botResponse whenever it updates (and it's not "Thinking...")
+    useEffect(() => {
+        if (botResponse && botResponse !== "Thinking..." && !loading) {
+            const utterance = new SpeechSynthesisUtterance(botResponse);
+            const voices = window.speechSynthesis.getVoices();
+            // Option: choose a specific voice by name, fallback to first available voice
+            utterance.voice = voices.find(voice => voice.name === "Google US English") || voices[0];
+            utterance.lang = "en-US";  // You can adjust language as needed
+            utterance.rate = 1;        // Adjust speaking rate (1 is normal)
+            utterance.pitch = 1;       // Adjust pitch
+            window.speechSynthesis.speak(utterance);
+        }
+    }, [botResponse, loading]);
+
     // Function to send user input to Flask API
     const sendMessage = async () => {
         if (userMessage.trim() === "") return; // Prevent empty messages
@@ -76,7 +90,8 @@ const MainPage = () => {
                     age: userInfo.age || "Unknown",
                     feeling: userInfo.feeling || "Unknown",
                 },
-                message: userMessage,  // Transcribed text stored here
+                emotion: "stressed",
+                message: userMessage,
             });
             setBotResponse(response.data.response);
         } catch (error) {
@@ -143,10 +158,10 @@ const MainPage = () => {
                     End Session
                 </button>
             </div>
-            {/* Optional: Display the current transcript */}
+            {/* Optional: Display the current transcript
             <div className="transcript-box">
                 <p>Transcript: {userMessage}</p>
-            </div>
+            </div> */}
         </div>
     );
 };

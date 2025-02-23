@@ -5,10 +5,11 @@ import logging
 from FBED import predict
 
 app = Flask(__name__)
+app.config['DEBUG']=False
 CORS(app)  # Allow cross-origin requests (if your React runs on a different port)
 
 chat_sessions = {}
-API_KEY = "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"
+API_KEY = "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"
 
 is_talking = False
 label_predicted = None
@@ -100,6 +101,7 @@ def generate_response():
                 Engage in a thoughtful conversation, remembering past exchanges within this session. Also, provide useful feedback when appropriate based on the school 
                 submitted by the user, like in the form of resources, things to do in the school area, etc. By taking into account the user's emotions through facial
                 and body expressions, attempt in using Cognitive Behavioral Therapy (CBT) to better understand the patients feelings and goals coming out of this session. 
+                Please keep it to a maximum of 50 words.
             """}
         ]
 
