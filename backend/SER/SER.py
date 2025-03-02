@@ -1,4 +1,5 @@
-#from backend.app import is_talking
+# The grand majority of this code was provide by https://github.com/devanshmody/Research_Methodology_COMP-5112
+
 import pandas as pd 
 import numpy as np 
 import tensorflow as tf
